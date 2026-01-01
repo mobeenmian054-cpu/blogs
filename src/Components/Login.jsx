@@ -14,32 +14,31 @@ const Login = () => {
         setIsLoading(true);
         setError('');
 
-        try {
-            const response = await fetch(`${API_BASE_URL}/api/users/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password }),
-            });
+        // Simulate network delay
+        setTimeout(() => {
+            try {
+                const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+                const user = existingUsers.find(u => u.email === email && u.password === password);
 
-            const data = await response.json();
-
-            if (response.ok) {
-                console.log('Login successful:', data);
-                // Save token so we can use it later
-                localStorage.setItem('userInfo', JSON.stringify(data));
-                window.dispatchEvent(new Event('authChange'));
-                navigate('/');
-            } else {
-                setError(data.message || 'Login failed');
+                if (user) {
+                    console.log('Login successful:', user);
+                    // Save token so we can use it later
+                    // We don't have a real token, so we just save the user info
+                    // Exclude password from the stored session info for "security" (mock security)
+                    const { password, ...userWithoutPassword } = user;
+                    localStorage.setItem('userInfo', JSON.stringify(userWithoutPassword));
+                    window.dispatchEvent(new Event('authChange'));
+                    navigate('/');
+                } else {
+                    setError('Invalid email or password');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                setError('An error occurred during login.');
+            } finally {
+                setIsLoading(false);
             }
-        } catch (error) {
-            console.error('Error:', error);
-            setError('An error occurred during login.');
-        } finally {
-            setIsLoading(false);
-        }
+        }, 1000);
     };
 
     return (

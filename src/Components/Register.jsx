@@ -22,30 +22,31 @@ const Register = () => {
 
         setIsLoading(true);
 
-        try {
-            const response = await fetch(`${API_BASE_URL}/api/users/register`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, email, password }),
-            });
+        // Simulate network delay
+        setTimeout(() => {
+            try {
+                const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+                const userExists = existingUsers.find(user => user.email === email);
 
-            const data = await response.json();
+                if (userExists) {
+                    setError('User already exists');
+                    setIsLoading(false);
+                    return;
+                }
 
-            if (response.ok) {
-                console.log('Registration successful:', data);
+                const newUser = { username, email, password };
+                existingUsers.push(newUser);
+                localStorage.setItem('registeredUsers', JSON.stringify(existingUsers));
+
+                console.log('Registration successful:', newUser);
                 navigate('/login');
-            } else {
-                console.error('Registration failed:', data.message);
-                setError(data.message || 'Registration failed');
+            } catch (error) {
+                console.error('Error:', error);
+                setError('An error occurred during registration.');
+            } finally {
+                setIsLoading(false);
             }
-        } catch (error) {
-            console.error('Error:', error);
-            setError('An error occurred during registration.');
-        } finally {
-            setIsLoading(false);
-        }
+        }, 1000);
     };
 
     return (
