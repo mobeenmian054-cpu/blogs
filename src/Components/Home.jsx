@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import API_BASE_URL from '../config';
 
 const Home = () => {
-  const [blogs, setBlogs] = useState([]);
+  const [, setBlogs] = useState([]);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/blogs`)

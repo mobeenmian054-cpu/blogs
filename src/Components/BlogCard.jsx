@@ -20,7 +20,7 @@ const BlogCard = ({ blog }) => {
                 <div className="flex items-center gap-2 text-xs font-medium text-gray-500 mb-4 uppercase tracking-wider">
                     <span className="text-indigo-600">Article</span>
                     <span>•</span>
-                    <span>{new Date(blog.createdAt || Date.now()).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                    <span>{blog.createdAt ? new Date(blog.createdAt).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' }) : 'Recently'}</span>
                 </div>
 
                 <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-indigo-600 transition-colors line-clamp-2 leading-tight">

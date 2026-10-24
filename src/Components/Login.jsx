@@ -25,7 +25,7 @@ const Login = () => {
                     // Save token so we can use it later
                     // We don't have a real token, so we just save the user info
                     // Exclude password from the stored session info for "security" (mock security)
-                    const { password, ...userWithoutPassword } = user;
+                    const { password: _PASSWORD, ...userWithoutPassword } = user;
                     localStorage.setItem('userInfo', JSON.stringify(userWithoutPassword));
                     window.dispatchEvent(new Event('authChange'));
                     navigate('/');
